@@ -15,6 +15,7 @@ FirstPop = cast(genrpop(PopSize,Space),'uint8');    % generate population of 1-4
 
 Penalties = zeros(PopSize,1);
 
+
 % 1 right, 2 up, 3 left, 4 down
 for i = 1:PopSize
     Pos = StartPos;

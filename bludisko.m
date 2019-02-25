@@ -1,3 +1,4 @@
+
 % 1 volno
 % 0 prekazka
 

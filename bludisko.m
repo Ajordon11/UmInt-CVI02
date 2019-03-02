@@ -2,7 +2,7 @@
 % 1 volno
 % 0 prekazka
 
-load('bludisko2');
+load('bludisko3');
 n=size(b,1);
 CycleNum = 5000;
 StartPos = [1,1];                     
@@ -12,11 +12,11 @@ b(EndPos(1),EndPos(2)) = 3;
 start_b = b;
 
 PopSize = 50;
-Moves = 100;
+Moves = 500;
 Space=[ones(1,Moves);ones(1,Moves)*4];  
 Population = cast(genrpop(PopSize,Space),'uint8');     % generate population of 0-4
                     
-minFit = 1500;
+minFit = 5000;
 indx = 1;
 minRet=Population(indx,:);                             % initializing 
 
@@ -80,7 +80,7 @@ for cycle = 1:CycleNum
         Distance = distance(Pos,EndPos);
         if MinDistance > EndMoves
             % in case population makes less moves than bare minimum           
-            Score(unit(1)) = Penalties(unit(1)) + Distance + EndMoves + 1000;
+            Score(unit(1)) = 3*Penalties(unit(1)) + 2*Distance + EndMoves + 1000;
         else 
             Score(unit(1)) = 3*Penalties(unit(1)) + 2*Distance + EndMoves;
         end
@@ -95,13 +95,13 @@ for cycle = 1:CycleNum
         FinalCycle = cycle;
         BestDistance = Distance;
     end
-    FitPop = selbest(Population,Score,[7 5 3 1]);
+    FitPop = selbest(Population,Score,[8 6 4 2]);
     FitmPop = mutx(FitPop,0.1,Space);
     
-    RandPop = selsus(Population,Score,PopSize-16);
+    RandPop = selsus(Population,Score,PopSize-20);
     CrossPop=crossov(RandPop,4,0);
-    MutxPop=mutx(CrossPop,0.15,Space);
-    MutaPop=muta(MutxPop,0.15,ones(1,Moves)*4,Space);
+    MutxPop=mutx(CrossPop,0.2,Space);
+    MutaPop=muta(MutxPop,0.2,ones(1,Moves)*4,Space);
     Population = [FitmPop;MutaPop];
 end
 

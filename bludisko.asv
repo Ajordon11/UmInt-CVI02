@@ -67,7 +67,7 @@ for cycle = 1:CycleNum
                 case 0
                     continue
             end
-            EndMoves = EndMoves + 1;        % if it got to this point, it must have moved
+            EndMoves = EndMoves + 1;        
             b = draw(b,Pos(1),Pos(2));
             % in case it gets near to end point before using all moves
             if distance(Pos,EndPos) == 0
@@ -76,10 +76,9 @@ for cycle = 1:CycleNum
                 end
             end
         end
-        % distance of target and population end point, using Manhattan distance formula
+        % distance of end point and population, using Manhattan distance formula
         Distance = distance(Pos,EndPos);
         if MinDistance > EndMoves
-            % in case population makes less moves than bare minimum           
             Score(unit(1)) = Penalties(unit(1)) + Distance + EndMoves + 1000;
         else 
             Score(unit(1)) = 3*Penalties(unit(1)) + 2*Distance + EndMoves;
@@ -102,7 +101,7 @@ for cycle = 1:CycleNum
     CrossPop=crossov(RandPop,4,0);
     MutxPop=mutx(CrossPop,0.15,Space);
     MutaPop=muta(MutxPop,0.15,ones(1,Moves)*4,Space);
-    Population = [FitmPop;MutaPop];
+    Population = [FitPop;MutaPop];
 end
 
 b = start_b;
@@ -118,6 +117,7 @@ end
 function[b] = draw(b,x,y)
     b(x,y) = 2;
 end
+
 
 function[penalty] = checkEdge(x,y)
     if x <= 0 || x > 40 || y <= 0 || y > 40
@@ -174,7 +174,6 @@ function[m] = drawBest(minRet, b, StartPos, Moves)
     image(b+1);colormap(hsv(5));
     pause(0.5);
 end
-
 function[] = ending(minRet, cycle, b, Pos, Moves)
     disp("Hotovo!");
     disp("generacia: ");

@@ -2,7 +2,7 @@
 % 1 volno
 % 0 prekazka
 
-load('bludisko3');
+load('bludisko2');
 n=size(b,1);
 CycleNum = 5000;
 StartPos = [1,1];                     
@@ -12,7 +12,7 @@ b(EndPos(1),EndPos(2)) = 3;
 start_b = b;
 
 PopSize = 50;
-Moves = 500;
+Moves = 200;
 Space=[ones(1,Moves);ones(1,Moves)*4];  
 Population = cast(genrpop(PopSize,Space),'uint8');     % generate population of 0-4
                     
@@ -25,7 +25,7 @@ MinDistance = distance(StartPos,EndPos);
 BestDistance = MinDistance;
 for cycle = 1:CycleNum
 
-    Population = change(Population,0,Space);
+    Population = change(Population,2,Space);
     Penalties = zeros(PopSize,1);
     Score = zeros(PopSize,1);
         
@@ -96,13 +96,13 @@ for cycle = 1:CycleNum
         BestDistance = Distance;
     end
     FitPop = selbest(Population,Score,[8 6 4 2]);
-    FitmPop = mutx(FitPop,0.1,Space);
+    %FitmPop = mutx(FitPop,0.1,Space);
     
     RandPop = selsus(Population,Score,PopSize-20);
     CrossPop=crossov(RandPop,4,0);
     MutxPop=mutx(CrossPop,0.2,Space);
     MutaPop=muta(MutxPop,0.2,ones(1,Moves)*4,Space);
-    Population = [FitmPop;MutaPop];
+    Population = [FitPop;MutaPop];
 end
 
 b = start_b;

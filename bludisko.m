@@ -2,9 +2,9 @@
 % 1 volno
 % 0 prekazka
 
-load('bludisko2');
+load('bludisko3');
 n=size(b,1);
-CycleNum = 5000;
+CycleNum = 10000;
 StartPos = [1,1];                     
 b = draw(b,StartPos(1),StartPos(2));                % draw into matrix
 EndPos = [40,40];                     
@@ -12,7 +12,7 @@ b(EndPos(1),EndPos(2)) = 3;
 start_b = b;
 
 PopSize = 50;
-Moves = 200;
+Moves = 500;
 Space=[ones(1,Moves);ones(1,Moves)*4];  
 Population = cast(genrpop(PopSize,Space),'uint8');     % generate population of 0-4
                     
@@ -78,11 +78,13 @@ for cycle = 1:CycleNum
         end
         % distance of target and population end point, using Manhattan distance formula
         Distance = distance(Pos,EndPos);
-        if MinDistance > EndMoves
+        if Distance <= 1
+            Score(unit(1)) = Penalties(unit(1)) + 5*(EndMoves-MinDistance);
+        elseif MinDistance > EndMoves
             % in case population makes less moves than bare minimum           
             Score(unit(1)) = 3*Penalties(unit(1)) + 2*Distance + EndMoves + 1000;
         else 
-            Score(unit(1)) = 3*Penalties(unit(1)) + 2*Distance + EndMoves;
+            Score(unit(1)) = 4*Penalties(unit(1)) + 3*Distance + 5*(EndMoves-MinDistance);
         end
         %image(b+1);colormap(hsv(5));
         %pause(0.05);
@@ -96,13 +98,13 @@ for cycle = 1:CycleNum
         BestDistance = Distance;
     end
     FitPop = selbest(Population,Score,[8 6 4 2]);
-    %FitmPop = mutx(FitPop,0.1,Space);
+    FitmPop = mutx(FitPop,0.1,Space);
     
     RandPop = selsus(Population,Score,PopSize-20);
-    CrossPop=crossov(RandPop,4,0);
+    CrossPop=crossov(RandPop,randi(4),0);
     MutxPop=mutx(CrossPop,0.2,Space);
     MutaPop=muta(MutxPop,0.2,ones(1,Moves)*4,Space);
-    Population = [FitPop;MutaPop];
+    Population = [FitmPop;MutaPop];
 end
 
 b = start_b;
